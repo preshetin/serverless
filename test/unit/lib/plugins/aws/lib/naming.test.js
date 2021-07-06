@@ -557,8 +557,10 @@ describe('#naming()', () => {
 
   describe('#getStreamConsumerName()', () => {
     it('should add the standard suffix', () => {
+      serverless.service.serviceObject = { name: 'someService' };
+      serverless.service.provider.stage = sdk.naming.provider.getStage();
       expect(sdk.naming.getStreamConsumerName('functionName', 'streamName')).to.equal(
-        'functionNamestreamNameConsumer'
+        'functionNamestreamNamesomeServicedevConsumer'
       );
     });
   });

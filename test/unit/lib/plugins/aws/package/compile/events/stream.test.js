@@ -1104,6 +1104,7 @@ describe('AwsCompileStreamEvents', () => {
 
     describe('when a Kinesis stream ARN is given', () => {
       it('should create event source mappings when a Kinesis stream ARN is given', () => {
+        serverless.service.serviceObject = { name: 'someService' };
         awsCompileStreamEvents.serverless.service.functions = {
           first: {
             events: [
@@ -1355,11 +1356,11 @@ describe('AwsCompileStreamEvents', () => {
         expect(
           awsCompileStreamEvents.serverless.service.provider.compiledCloudFormationTemplate
             .Resources.FirstEventSourceMappingKinesisAbc.DependsOn
-        ).to.eql(['IamRoleLambdaExecution', 'FirstabcConsumerStreamConsumer']);
+        ).to.eql(['IamRoleLambdaExecution', 'FirstabcsomeServicedevConsumerStreamConsumer']);
         expect(
           awsCompileStreamEvents.serverless.service.provider.compiledCloudFormationTemplate
             .Resources.FirstEventSourceMappingKinesisAbc.Properties.EventSourceArn
-        ).to.eql({ Ref: 'FirstabcConsumerStreamConsumer' });
+        ).to.eql({ Ref: 'FirstabcsomeServicedevConsumerStreamConsumer' });
         expect(
           awsCompileStreamEvents.serverless.service.provider.compiledCloudFormationTemplate
             .Resources.FirstEventSourceMappingKinesisAbc.Properties.BatchSize
@@ -1435,6 +1436,7 @@ describe('AwsCompileStreamEvents', () => {
       });
 
       it('should create stream consumer when a Kinesis stream with consumer "true" is given', () => {
+        serverless.service.serviceObject = { name: 'someService' };
         awsCompileStreamEvents.serverless.service.functions = {
           first: {
             events: [
@@ -1452,19 +1454,20 @@ describe('AwsCompileStreamEvents', () => {
 
         expect(
           awsCompileStreamEvents.serverless.service.provider.compiledCloudFormationTemplate
-            .Resources.FirstabcConsumerStreamConsumer.Type
+            .Resources.FirstabcsomeServicedevConsumerStreamConsumer.Type
         ).to.equal('AWS::Kinesis::StreamConsumer');
         expect(
           awsCompileStreamEvents.serverless.service.provider.compiledCloudFormationTemplate
-            .Resources.FirstabcConsumerStreamConsumer.Properties.ConsumerName
-        ).to.equal('firstabcConsumer');
+            .Resources.FirstabcsomeServicedevConsumerStreamConsumer.Properties.ConsumerName
+        ).to.equal('firstabcsomeServicedevConsumer');
         expect(
           awsCompileStreamEvents.serverless.service.provider.compiledCloudFormationTemplate
-            .Resources.FirstabcConsumerStreamConsumer.Properties.StreamARN
+            .Resources.FirstabcsomeServicedevConsumerStreamConsumer.Properties.StreamARN
         ).to.equal(awsCompileStreamEvents.serverless.service.functions.first.events[0].stream.arn);
       });
 
       it('should add the necessary IAM role statements', () => {
+        serverless.service.serviceObject = { name: 'someService' };
         awsCompileStreamEvents.serverless.service.functions = {
           first: {
             events: [
@@ -1523,7 +1526,7 @@ describe('AwsCompileStreamEvents', () => {
             Effect: 'Allow',
             Action: ['kinesis:SubscribeToShard'],
             Resource: [
-              { Ref: 'FirstfizzConsumerStreamConsumer' },
+              { Ref: 'FirstfizzsomeServicedevConsumerStreamConsumer' },
               'arn:aws:kinesis:region:account:stream/buzz/consumer/abc:1558544531',
             ],
           },
